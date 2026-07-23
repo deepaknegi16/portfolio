@@ -1,0 +1,78 @@
+[
+  {
+    "slug": "eureka-service-registry",
+    "title": "Eureka Service Registry",
+    "blurb": "A Spring Cloud Netflix Eureka server that lets microservices find each other without hard-coded addresses, packaged to run as a container.",
+    "description": [
+      "A standalone service-discovery server built on Spring Cloud Netflix Eureka. Services register themselves at startup and resolve their peers by logical name, so instances can move, scale, or restart without anyone editing a config file full of hostnames.",
+      "TODO: Add a paragraph on what prompted this — which services registered against it, what you learned about client-side load balancing or the registry's self-preservation behaviour, and what you would do differently now."
+    ],
+    "stack": ["Java 8", "Spring Boot", "Spring Cloud Netflix", "Maven", "Docker"],
+    "highlights": [
+      "Eureka server via spring-cloud-starter-netflix-eureka-server on the Finchley release train",
+      "Packaged as a runnable fat JAR by the Spring Boot Maven plugin",
+      "Containerised on an openjdk:8 base image, exposing the registry dashboard on port 8070",
+      "TODO: add a highlight about scale, uptime, or a specific problem this solved"
+    ],
+    "year": "2021-11",
+    "status": "archived",
+    "featured": true,
+    "order": 10,
+    "repo": "deepaknegi16/Eureka"
+  },
+  {
+    "slug": "graph-algorithms",
+    "title": "Graph Algorithms",
+    "blurb": "A working set of graph data structures and traversals in Java — adjacency-list representation with breadth-first search on top.",
+    "description": [
+      "A practice repository for graph representations and traversal algorithms, written from scratch rather than assembled from a library. Currently an adjacency-list container and a breadth-first traversal built against it.",
+      "TODO: Say what you were preparing for or exploring here, and which algorithms you plan to add next (DFS, topological sort, shortest paths)."
+    ],
+    "stack": ["Java", "Data Structures", "Algorithms"],
+    "highlights": [
+      "Adjacency-list graph container written from first principles",
+      "Breadth-first traversal implemented against that container",
+      "TODO: add the next algorithm as you write it"
+    ],
+    "year": "2024-07",
+    "status": "experiment",
+    "featured": true,
+    "order": 20,
+    "repo": "deepaknegi16/graph"
+  },
+  {
+    "slug": "your-next-project",
+    "title": "TODO: Project title",
+    "blurb": "TODO: One sentence describing what this project does and who it is for. Keep it under 240 characters — it is the card summary.",
+    "description": [
+      "TODO: Two or three paragraphs for the detail page. What problem did it solve? What did you build? What was hard about it?",
+      "TODO: Duplicate this whole entry for each additional project. Delete this placeholder once you have real ones."
+    ],
+    "stack": ["TODO: Tech", "TODO: Tech"],
+    "highlights": [
+      "TODO: A specific, concrete thing you did",
+      "TODO: A measurable outcome if you have one"
+    ],
+    "year": "2026",
+    "status": "planned",
+    "featured": false,
+    "order": 90,
+    "needsContent": true
+  },
+  {
+    "slug": "private-work-project",
+    "title": "TODO: A project with no public repo",
+    "blurb": "TODO: This entry exists to show the shape of a work or private project — no `repo` field, so no GitHub link and no stats are attached.",
+    "description": [
+      "TODO: Describe closed-source or employer work here. Keep to what you are allowed to disclose: the problem, your role, the shape of the solution, the outcome.",
+      "TODO: Delete this placeholder if you have nothing to add."
+    ],
+    "stack": ["TODO: Tech"],
+    "highlights": ["TODO: What you owned and what changed because of it"],
+    "role": "TODO: e.g. Backend Engineer",
+    "status": "active",
+    "featured": false,
+    "order": 95,
+    "needsContent": true
+  }
+]

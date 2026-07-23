@@ -1,0 +1,28 @@
+# Secrets — never commit
+.env
+.env.local
+
+# Node
+node_modules/
+npm-debug.log*
+.npm/
+
+# Astro
+frontend/dist/
+frontend/.astro/
+
+# Python (phases 3–4)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Note: frontend/src/data/github-cache.json is intentionally NOT ignored.
+# It is a committed build artifact so builds are reproducible offline — see
+# decisions/0002-github-as-enrichment-not-source.md

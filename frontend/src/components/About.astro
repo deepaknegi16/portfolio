@@ -1,0 +1,29 @@
+---
+import { getProfile } from '../lib/providers';
+import { hasTodo } from '../lib/format';
+import PlaceholderNote from './PlaceholderNote.astro';
+
+const profile = await getProfile();
+const isPlaceholder = hasTodo(profile.about, profile.tagline, profile.role);
+---
+
+<section id="about" class="section container" aria-labelledby="about-heading">
+  <h2 id="about-heading" class="section-heading">about</h2>
+
+  {isPlaceholder && <PlaceholderNote file="src/data/profile.json" />}
+
+  <div class="prose">
+    {profile.about.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+</section>
+
+<style>
+  .prose {
+    max-width: 64ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+  }
+</style>

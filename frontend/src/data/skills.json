@@ -1,0 +1,23 @@
+[
+  {
+    "category": "Languages",
+    "items": ["Java", "TODO: add the rest"],
+    "note": "TODO: Keep this list to what you would be comfortable being interviewed on."
+  },
+  {
+    "category": "Frameworks",
+    "items": ["Spring Boot", "Spring Cloud", "TODO: add the rest"]
+  },
+  {
+    "category": "Infrastructure",
+    "items": ["Docker", "nginx", "TODO: add the rest"]
+  },
+  {
+    "category": "Build & Tooling",
+    "items": ["Maven", "Git", "TODO: add the rest"]
+  },
+  {
+    "category": "TODO: Databases",
+    "items": ["TODO: e.g. PostgreSQL, Redis"]
+  }
+]

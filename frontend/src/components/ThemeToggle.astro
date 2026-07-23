@@ -1,0 +1,85 @@
+---
+/**
+ * Dark/light switch. Vanilla TS island — the whole of the site's interactivity
+ * budget, alongside the project filter.
+ *
+ * The initial theme is applied by the inline script in BaseLayout before first
+ * paint; this component only handles subsequent changes.
+ */
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  aria-label="Switch colour theme"
+  title="Switch colour theme"
+>
+  <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    background: transparent;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+  }
+
+  .icon {
+    grid-area: 1 / 1;
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Show the icon for the theme you'd switch TO. */
+  :global(html[data-theme='dark']) .icon-moon,
+  :global(html[data-theme='light']) .icon-sun {
+    display: none;
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+
+  toggle?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+
+    root.dataset.theme = next;
+
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Private browsing or blocked storage — the theme still applies for this
+      // page view, it just won't persist. Not worth surfacing to the user.
+    }
+  });
+</script>

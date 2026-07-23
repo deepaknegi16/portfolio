@@ -1,0 +1,145 @@
+---
+import { getProjects } from '../lib/providers';
+import { collectStacks, stackKey } from '../lib/format';
+import ProjectCard from './ProjectCard.astro';
+
+const projects = await getProjects();
+
+/*
+ * Filters are capped at the eight most common technologies. More than that and
+ * the bar wraps into a wall of buttons that is harder to scan than the grid it
+ * filters. Everything remains reachable via "all".
+ */
+const FILTER_LIMIT = 8;
+const allStacks = collectStacks(projects);
+const filters = allStacks.slice(0, FILTER_LIMIT);
+const hiddenFilterCount = allStacks.length - filters.length;
+---
+
+<section id="projects" class="section container" aria-labelledby="projects-heading">
+  <h2 id="projects-heading" class="section-heading">projects</h2>
+
+  {
+    filters.length > 1 && (
+      <div class="filters" role="group" aria-label="Filter projects by technology">
+        <button type="button" class="filter is-active" data-filter="all" aria-pressed="true">
+          all <span class="count">{projects.length}</span>
+        </button>
+        {filters.map((tech) => (
+          <button
+            type="button"
+            class="filter"
+            data-filter={stackKey(tech)}
+            aria-pressed="false"
+          >
+            {tech}
+          </button>
+        ))}
+        {hiddenFilterCount > 0 && (
+          <span class="mono-label filter-note">
+            +{hiddenFilterCount} more in project details
+          </span>
+        )}
+      </div>
+    )
+  }
+
+  <div class="grid" data-project-grid>
+    {projects.map((project) => <ProjectCard project={project} />)}
+  </div>
+
+  {/* Only reachable by filtering; announced politely so it isn't missed. */}
+  <p class="empty" data-empty-state hidden aria-live="polite">
+    No projects match that filter.
+  </p>
+</section>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .filter {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    background: transparent;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .filter:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+
+  .filter.is-active {
+    background: var(--accent-dim);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--accent);
+  }
+
+  .count {
+    color: var(--text-subtle);
+  }
+
+  .filter-note {
+    margin-left: var(--space-2);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: var(--space-4);
+  }
+
+  .empty {
+    padding: var(--space-6);
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+</style>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-project]');
+  const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+
+  filters.forEach((button) => {
+    button.addEventListener('click', () => {
+      const selected = button.dataset.filter ?? 'all';
+
+      filters.forEach((other) => {
+        const isActive = other === button;
+        other.classList.toggle('is-active', isActive);
+        other.setAttribute('aria-pressed', String(isActive));
+      });
+
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const stacks = (card.dataset.stacks ?? '').split(' ');
+        const matches = selected === 'all' || stacks.includes(selected);
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      if (emptyState) emptyState.hidden = visible > 0;
+    });
+  });
+</script>

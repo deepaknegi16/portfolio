@@ -1,0 +1,126 @@
+/*
+ * Design tokens — the single source of truth for colour, type, space and motion.
+ * Components reference these variables and never hard-code values.
+ * Light mode is a re-declaration of the SAME token names, so themes never
+ * require touching component CSS.
+ *
+ * See decisions/0007-dark-terminal-design-system.md
+ */
+
+:root {
+  /* ── Type ─────────────────────────────────────────────────────────────── */
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, 'SF Mono',
+    Menlo, Consolas, monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+
+  /* Fluid scale — clamps mean no breakpoint juggling for type */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.25rem + 1.1vw, 2rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+  --text-4xl: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.65;
+
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.16em;
+
+  /* ── Space ────────────────────────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* ── Shape ────────────────────────────────────────────────────────────── */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 999px;
+
+  --border-width: 1px;
+
+  /* ── Layout ───────────────────────────────────────────────────────────── */
+  --container-max: 68rem;
+  --container-pad: clamp(1.25rem, 4vw, 2.5rem);
+  --nav-height: 3.5rem;
+
+  /* ── Motion ───────────────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 420ms;
+
+  /* ── Colour: dark (default) ───────────────────────────────────────────── */
+  color-scheme: dark;
+
+  --bg: #0a0c10;
+  --bg-elevated: #10141a;
+  --surface: #14181f;
+  --surface-hover: #1a1f28;
+  --border: #242a35;
+  --border-strong: #333b49;
+
+  --text: #e8ebf0;
+  --text-muted: #98a2b3;
+  --text-subtle: #6b7482;
+
+  --accent: #4ade80;
+  --accent-strong: #86efac;
+  --accent-dim: #1c3a2a;
+  --accent-contrast: #0a0c10;
+
+  --info: #38bdf8;
+  --warn: #fbbf24;
+
+  /* Selection / focus / decoration */
+  --selection-bg: #1c3a2a;
+  --selection-text: #eafff2;
+  --focus-ring: var(--accent);
+  --grid-line: rgba(255, 255, 255, 0.028);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
+
+/*
+ * Light theme. Same token names, different values.
+ * The accent darkens considerably — #4ade80 on white is ~1.6:1 and unusable
+ * for text; #067647 clears 4.5:1.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #fcfcfb;
+  --bg-elevated: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #f5f6f8;
+  --border: #e3e6eb;
+  --border-strong: #cbd1da;
+
+  --text: #14181f;
+  --text-muted: #525c6b;
+  --text-subtle: #79828f;
+
+  --accent: #067647;
+  --accent-strong: #045c37;
+  --accent-dim: #dcfce7;
+  --accent-contrast: #ffffff;
+
+  --info: #0369a1;
+  --warn: #a16207;
+
+  --selection-bg: #dcfce7;
+  --selection-text: #052e1c;
+  --grid-line: rgba(0, 0, 0, 0.035);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px -14px rgba(15, 23, 42, 0.18);
+}

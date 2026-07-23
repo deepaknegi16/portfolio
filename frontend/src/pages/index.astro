@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import SkillsGrid from '../components/SkillsGrid.astro';
+import ExperienceTimeline from '../components/ExperienceTimeline.astro';
+import { getProfile } from '../lib/providers';
+
+const profile = await getProfile();
+
+const title = profile.seo?.title ?? `${profile.name} — ${profile.role}`;
+const description = profile.seo?.description ?? profile.tagline;
+---
+
+<BaseLayout title={title} description={description} path="/">
+  <Hero />
+  <About />
+  <ProjectGrid />
+  <SkillsGrid />
+  <ExperienceTimeline />
+</BaseLayout>

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "current-role",
+    "role": "TODO: Job title",
+    "org": "TODO: Company name",
+    "kind": "work",
+    "start": "2024-01",
+    "location": "TODO: city or Remote",
+    "summary": "TODO: One or two sentences on what the team owns and where you fit. Omit the `end` field entirely for an ongoing role — the timeline renders 'Present'.",
+    "highlights": [
+      "TODO: Something you built or fixed, with the outcome",
+      "TODO: Something you owned — a service, a migration, an on-call rotation"
+    ],
+    "stack": ["TODO: Tech", "TODO: Tech"],
+    "needsContent": true
+  },
+  {
+    "id": "previous-role",
+    "role": "TODO: Previous job title",
+    "org": "TODO: Previous company",
+    "kind": "work",
+    "start": "2021-01",
+    "end": "2023-12",
+    "summary": "TODO: Duplicate this entry for each role. Delete any you do not need.",
+    "highlights": ["TODO: What you shipped there"],
+    "stack": ["TODO: Tech"],
+    "needsContent": true
+  },
+  {
+    "id": "education",
+    "role": "TODO: Degree, e.g. B.Tech Computer Science",
+    "org": "TODO: Institution",
+    "kind": "education",
+    "start": "2014",
+    "end": "2018",
+    "summary": "TODO: Optional — coursework or projects worth mentioning.",
+    "highlights": [],
+    "stack": [],
+    "needsContent": true
+  }
+]

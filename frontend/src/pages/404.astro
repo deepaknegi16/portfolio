@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 — Not found"
+  description="That page does not exist."
+  path="/404"
+>
+  <section class="container notfound">
+    <p class="prompt" aria-hidden="true">
+      <span class="sigil">~/</span><span class="symbol">$</span> cat this-page
+    </p>
+    <h1>404</h1>
+    <p class="message">No such file or directory.</p>
+    <a class="link-arrow" href="/">back to the homepage</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding-block: var(--space-10);
+    min-height: 50dvh;
+  }
+
+  .prompt {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .sigil {
+    color: var(--text-subtle);
+  }
+
+  .symbol {
+    color: var(--accent);
+    margin-right: 0.4em;
+  }
+
+  h1 {
+    font-family: var(--font-mono);
+    font-size: var(--text-4xl);
+    color: var(--accent);
+  }
+
+  .message {
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+  }
+</style>

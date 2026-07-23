@@ -1,0 +1,99 @@
+# Portfolio stack.
+#
+#   docker compose up --build              site + public tunnel
+#   docker compose up --build web          site only, no ngrok needed
+#   docker compose --profile dev up dev     Astro dev server with hot reload
+#
+# Phase 3 adds an `api` service, Phase 4 a `db` service — both sketched at the
+# bottom of this file. See decisions/0008-phase-boundaries.md
+
+services:
+  web:
+    build:
+      context: ./frontend
+      args:
+        # Astro bakes these into the build; they are not runtime settings.
+        PUBLIC_DATA_SOURCE: ${PUBLIC_DATA_SOURCE:-static}
+        PUBLIC_API_BASE_URL: ${PUBLIC_API_BASE_URL:-}
+        GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    image: portfolio-web:latest
+    restart: unless-stopped
+    ports:
+      # Local access only — ngrok reaches nginx over the internal network.
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    # Requires NGROK_AUTHTOKEN and NGROK_DOMAIN in .env. Without them this
+    # service fails to start — `web` still serves fine on localhost:8080.
+    command: http --domain=${NGROK_DOMAIN} web:80
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:?set NGROK_AUTHTOKEN in .env — see .env.example}
+    ports:
+      # Request inspector: http://localhost:4040
+      - "4040:4040"
+    depends_on:
+      web:
+        condition: service_healthy
+
+  # Optional containerised dev server. Not started by default.
+  #   docker compose --profile dev up dev   →   http://localhost:4321
+  dev:
+    profiles: ["dev"]
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      PUBLIC_DATA_SOURCE: ${PUBLIC_DATA_SOURCE:-static}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    volumes:
+      - ./frontend:/app
+      # Anonymous volume keeps the container's node_modules from being shadowed
+      # by the host's — they are built for different platforms.
+      - /app/node_modules
+    ports:
+      - "4321:4321"
+
+# ─── Phase 3 ─────────────────────────────────────────────────────────────────
+# Uncomment alongside the /api/ proxy block in frontend/nginx/default.conf.
+#
+#  api:
+#    build: ./backend
+#    restart: unless-stopped
+#    environment:
+#      DATABASE_URL: postgresql+asyncpg://portfolio:${POSTGRES_PASSWORD}@db:5432/portfolio
+#    healthcheck:
+#      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+#      interval: 30s
+#      timeout: 3s
+#      retries: 3
+#    depends_on:
+#      db:
+#        condition: service_healthy
+
+# ─── Phase 4 ─────────────────────────────────────────────────────────────────
+#
+#  db:
+#    image: postgres:17-alpine
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_DB: portfolio
+#      POSTGRES_USER: portfolio
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio"]
+#      interval: 10s
+#      timeout: 3s
+#      retries: 5
+#
+# volumes:
+#   pgdata:

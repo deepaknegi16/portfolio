@@ -1,0 +1,183 @@
+---
+import { getExperience } from '../lib/providers';
+import { formatDateRange, hasTodo } from '../lib/format';
+import TechChip from './TechChip.astro';
+import PlaceholderNote from './PlaceholderNote.astro';
+
+const experience = await getExperience();
+const isPlaceholder = experience.some((entry) => hasTodo(entry.role, entry.org));
+---
+
+<section id="experience" class="section container" aria-labelledby="experience-heading">
+  <h2 id="experience-heading" class="section-heading">experience</h2>
+
+  {isPlaceholder && <PlaceholderNote file="src/data/experience.json" />}
+
+  <ol class="timeline" role="list">
+    {
+      experience.map((entry) => (
+        <li class="entry">
+          <div class="marker" aria-hidden="true">
+            <span class:list={['node', { current: !entry.end }]} />
+          </div>
+
+          <div class="body">
+            <p class="period mono-label">
+              {formatDateRange(entry.start, entry.end)}
+              {entry.kind !== 'work' && <span class="kind">· {entry.kind}</span>}
+            </p>
+
+            <h3 class="role">
+              {entry.role}
+              <span class="at">at</span>
+              {entry.orgUrl ? (
+                <a href={entry.orgUrl} target="_blank" rel="noopener">
+                  {entry.org}
+                </a>
+              ) : (
+                <span class="org">{entry.org}</span>
+              )}
+            </h3>
+
+            {entry.location && <p class="location mono-label">{entry.location}</p>}
+            {entry.summary && <p class="summary">{entry.summary}</p>}
+
+            {entry.highlights.length > 0 && (
+              <ul class="highlights">
+                {entry.highlights.map((highlight) => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+            )}
+
+            {entry.stack.length > 0 && (
+              <ul class="stack" role="list">
+                {entry.stack.map((tech) => (
+                  <li>
+                    <TechChip label={tech} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 56rem;
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: var(--space-4);
+  }
+
+  /* The rail: a line down the marker column, stopping at the last entry. */
+  .marker {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.45rem;
+  }
+
+  .marker::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .entry:first-child .marker::before {
+    top: 0.45rem;
+  }
+
+  .entry:last-child .marker::before {
+    bottom: auto;
+    height: 0.45rem;
+  }
+
+  .node {
+    position: relative;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--border-strong);
+  }
+
+  .node.current {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-dim);
+  }
+
+  .body {
+    padding-bottom: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .entry:last-child .body {
+    padding-bottom: 0;
+  }
+
+  .kind {
+    color: var(--text-subtle);
+  }
+
+  .role {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .at {
+    color: var(--text-subtle);
+    font-weight: 400;
+    margin-inline: 0.25em;
+  }
+
+  .org,
+  .role a {
+    color: var(--accent);
+  }
+
+  .summary {
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  .highlights {
+    margin: var(--space-1) 0 0;
+    padding-left: var(--space-4);
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  .highlights li {
+    margin-bottom: var(--space-1);
+  }
+
+  .highlights li::marker {
+    color: var(--accent);
+  }
+
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+</style>

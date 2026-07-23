@@ -1,0 +1,205 @@
+---
+import type { EnrichedProject } from '../lib/schema';
+import { formatCount, formatPartialDate, formatRelative, stackKey } from '../lib/format';
+import TechChip from './TechChip.astro';
+
+interface Props {
+  project: EnrichedProject;
+}
+
+const { project } = Astro.props;
+
+/* Filter targets, kept on the article so the grid script can match on them. */
+const stackKeys = project.stack.map(stackKey).join(' ');
+
+/* Four chips keeps every card the same height; the rest live on the detail page. */
+const visibleStack = project.stack.slice(0, 4);
+const overflowCount = project.stack.length - visibleStack.length;
+---
+
+<article
+  class:list={['card', { 'is-placeholder': project.needsContent }]}
+  data-project
+  data-stacks={stackKeys}
+>
+  <div class="card-top">
+    <span class:list={['status', `status-${project.status}`]}>{project.status}</span>
+    {
+      project.year && (
+        <span class="mono-label">{formatPartialDate(project.year)}</span>
+      )
+    }
+  </div>
+
+  <h3 class="title">
+    {/* Stretched link: the whole card is the hit area, one tab stop. */}
+    <a href={`/projects/${project.slug}`}>{project.title}</a>
+  </h3>
+
+  <p class="blurb">{project.blurb}</p>
+
+  {
+    visibleStack.length > 0 && (
+      <ul class="stack" role="list">
+        {visibleStack.map((tech) => (
+          <li>
+            <TechChip label={tech} emphasis={tech === project.github?.language} />
+          </li>
+        ))}
+        {overflowCount > 0 && (
+          <li>
+            <TechChip label={`+${overflowCount}`} />
+          </li>
+        )}
+      </ul>
+    )
+  }
+
+  <div class="card-foot">
+    {
+      project.github ? (
+        <div class="stats">
+          {project.github.language && (
+            <span class="stat">
+              <span class="dot" aria-hidden="true" />
+              {project.github.language}
+            </span>
+          )}
+          <span class="stat">
+            <span aria-hidden="true">★</span>
+            <span class="sr-only">Stars:</span>
+            {formatCount(project.github.stars)}
+          </span>
+          <span class="stat">
+            pushed {formatRelative(project.github.pushedAt)}
+          </span>
+        </div>
+      ) : (
+        <span class="mono-label">{project.role ?? 'no public repo'}</span>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    height: 100%;
+    padding: var(--space-5);
+    background: var(--surface);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    transition:
+      border-color var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  .card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Focus lands on the inner link, so lift the ring to the whole card. */
+  .card:focus-within {
+    border-color: var(--accent);
+  }
+
+  .is-placeholder {
+    border-style: dashed;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .status {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+
+  .status-active {
+    color: var(--accent);
+  }
+
+  .status-experiment {
+    color: var(--info);
+  }
+
+  .status-planned {
+    color: var(--warn);
+  }
+
+  .title {
+    font-size: var(--text-xl);
+    letter-spacing: -0.01em;
+  }
+
+  .title a {
+    text-decoration: none;
+  }
+
+  /* The stretched-link hit area. */
+  .title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .title a:hover {
+    color: var(--accent);
+  }
+
+  .blurb {
+    flex: 1;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card-foot {
+    padding-top: var(--space-3);
+    border-top: var(--border-width) solid var(--border);
+  }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .stat {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-subtle);
+  }
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+</style>

@@ -1,0 +1,110 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { getProfile } from '../lib/providers';
+
+const profile = await getProfile();
+
+/**
+ * Section links only work as anchors on the home page. On a project detail page
+ * they need to be absolute so they navigate home first.
+ */
+const isHome = Astro.url.pathname === '/';
+const prefix = isHome ? '' : '/';
+
+const links = [
+  { label: 'about', href: `${prefix}#about` },
+  { label: 'projects', href: `${prefix}#projects` },
+  { label: 'skills', href: `${prefix}#skills` },
+  { label: 'experience', href: `${prefix}#experience` },
+];
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-prompt">~/</span><span class="brand-name"
+        >{profile.githubUsername}</span
+      >
+    </a>
+
+    <nav aria-label="Sections">
+      <ul class="links" role="list">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--nav-height);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: var(--border-width) solid var(--border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    height: 100%;
+  }
+
+  .brand {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .brand-prompt {
+    color: var(--accent);
+  }
+
+  .brand-name {
+    color: var(--text);
+  }
+
+  .links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin: 0;
+  }
+
+  .links a {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .links a:hover {
+    color: var(--accent);
+  }
+
+  /*
+   * Below 46rem the links would crowd the brand and toggle. Rather than build a
+   * hamburger menu for four anchors, they collapse — the page is a single
+   * scroll and every section is reachable without them.
+   */
+  @media (max-width: 46rem) {
+    .links {
+      display: none;
+    }
+  }
+</style>

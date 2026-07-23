@@ -1,0 +1,25 @@
+{
+  "name": "Deepak Negi",
+  "githubUsername": "deepaknegi16",
+  "role": "TODO: your role — e.g. Backend Engineer",
+  "tagline": "TODO: one line on what you build and what you care about.",
+  "location": "TODO: city, country",
+  "email": "deepaknegi.1616@gmail.com",
+  "about": [
+    "TODO: Replace this paragraph. Open with what you actually do day to day and the kind of systems you work on — services, data pipelines, infrastructure, whatever is true. Two or three concrete sentences beat a page of adjectives.",
+    "TODO: Replace this paragraph. Say what you are good at and what you are currently learning or moving toward. If you are looking for work, say what kind."
+  ],
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/deepaknegi16",
+      "handle": "@deepaknegi16"
+    }
+  ],
+  "seo": {
+    "title": "Deepak Negi — TODO: your role",
+    "description": "TODO: 150-character description used by search engines and link previews.",
+    "siteUrl": "https://example.ngrok-free.app"
+  },
+  "needsContent": true
+}

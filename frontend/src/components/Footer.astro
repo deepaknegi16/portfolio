@@ -1,0 +1,88 @@
+---
+import { getProfile, githubFreshness } from '../lib/providers';
+import { formatRelative } from '../lib/format';
+
+const profile = await getProfile();
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="mono-label">
+      © {year} {profile.name}
+    </p>
+
+    <div class="footer-meta">
+      {
+        githubFreshness && (
+          <p class="mono-label">
+            {githubFreshness.stale ? 'github data stale · ' : 'github data · '}
+            {formatRelative(githubFreshness.fetchedAt)}
+          </p>
+        )
+      }
+
+      <ul class="socials" role="list">
+        {
+          profile.socials.map((social) => (
+            <li>
+              <a href={social.url} rel="me noopener" target="_blank">
+                {social.label}
+              </a>
+            </li>
+          ))
+        }
+        {
+          profile.email && (
+            <li>
+              <a href={`mailto:${profile.email}`}>Email</a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--space-9);
+    border-top: var(--border-width) solid var(--border);
+    padding-block: var(--space-6);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .socials {
+    display: flex;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .socials a {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .socials a:hover {
+    color: var(--accent);
+  }
+</style>
