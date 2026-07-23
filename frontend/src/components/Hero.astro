@@ -38,7 +38,7 @@ const profile = await getProfile();
       <a class="btn btn-primary" href="#projects">View projects</a>
       {
         profile.socials.map((social) => (
-          <a class="btn btn-icon" href={social.url} target="_blank" rel="me noopener">
+          <a class="btn" href={social.url} target="_blank" rel="me noopener">
             <SocialIcon name={social.icon} />
             {social.label}
           </a>
