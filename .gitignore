@@ -17,6 +17,10 @@ __pycache__/
 .venv/
 venv/
 
+# Code-review hook scratch state (per-session queues and once-per-turn flags).
+# The hooks and the agent definition ARE tracked; only this runtime state is not.
+.claude/.review/
+
 # OS / editor
 .DS_Store
 .idea/

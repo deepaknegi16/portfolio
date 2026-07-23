@@ -28,3 +28,4 @@ re-deriving it from the source or re-litigating settled questions.
 | [0007](0007-dark-terminal-design-system.md) | Dark terminal aesthetic, token-driven, no CDN assets | Accepted | 1 |
 | [0008](0008-phase-boundaries.md) | Phase boundaries and what defines "done" for each | Accepted | all |
 | [0009](0009-ngrok-free-tier-realities.md) | ngrok free tier: cloud endpoint conflict + browser interstitial | Accepted | 2 |
+| [0010](0010-automated-code-review-hook.md) | Batched per-turn code review via Claude Code hooks | Accepted | tooling |

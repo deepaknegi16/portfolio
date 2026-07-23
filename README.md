@@ -36,6 +36,7 @@ docker compose up --build     # site → http://localhost:8080
 | `contracts/` | OpenAPI sketch the Phase 3 backend implements |
 | `backend/` | FastAPI service — Phase 3 |
 | `decisions/` | One file per decision, with the reasoning |
+| `.claude/` | Project agents + hooks: automatic code review of each turn's changes |
 
 ## Editing content
 
