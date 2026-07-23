@@ -54,9 +54,13 @@ never get renumbered — decisions and commits reference them.
       commented `/api/` proxy block for Phase 3
 - [x] **P2-04** `docker-compose.yml` — `web` + `ngrok` services
 - [x] **P2-05** Optional `dev` compose profile (bind-mounted Astro dev server)
-- [!] **P2-06** Verify: healthy containers, `/healthz` 200, cache headers, public URL from
-      cellular — *blocked: Docker not installed, so none of the Phase 2 files have been
-      run even once*
+- [~] **P2-06** Verify — **local half done.** Image builds; container reports `healthy` in 3s;
+      `/healthz` → 200; `/` → 200; `/projects/<slug>/` → 200; bare slug → 301 to canonical;
+      unknown path → 404; `/.env` → 403; security headers present on *both* HTML and
+      `/_astro/` assets; HTML `max-age=0, must-revalidate` vs assets `immutable`;
+      gzip 20,212 → 4,595 bytes.
+      **Outstanding:** ngrok tunnel + reaching the public URL from cellular — blocked on
+      `NGROK_DOMAIN` being empty in `.env`.
 - [ ] **P2-07** Record ngrok interstitial behaviour in `decisions/` once observed
 
 ## Phase 3 — FastAPI backend
