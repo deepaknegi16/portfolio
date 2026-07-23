@@ -1,5 +1,6 @@
 ---
 import { getProfile } from '../lib/providers';
+import SocialIcon from './SocialIcon.astro';
 
 const profile = await getProfile();
 ---
@@ -37,7 +38,8 @@ const profile = await getProfile();
       <a class="btn btn-primary" href="#projects">View projects</a>
       {
         profile.socials.map((social) => (
-          <a class="btn" href={social.url} target="_blank" rel="me noopener">
+          <a class="btn btn-icon" href={social.url} target="_blank" rel="me noopener">
+            <SocialIcon name={social.icon} />
             {social.label}
           </a>
         ))
@@ -45,6 +47,7 @@ const profile = await getProfile();
       {
         profile.email && (
           <a class="btn" href={`mailto:${profile.email}`}>
+            <SocialIcon name="email" />
             Email
           </a>
         )
@@ -161,6 +164,7 @@ const profile = await getProfile();
   .btn {
     display: inline-flex;
     align-items: center;
+    gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-md);

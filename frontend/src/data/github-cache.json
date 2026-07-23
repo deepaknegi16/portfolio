@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-07-23T16:11:55.154Z",
+  "fetchedAt": "2026-07-23T17:37:06.425Z",
   "username": "deepaknegi16",
   "stale": false,
   "repos": {
@@ -19,7 +19,9 @@
       "archived": false,
       "isFork": false,
       "license": null,
-      "languages": {}
+      "languages": {
+        "Java": 1361
+      }
     },
     "deepaknegi16/Eureka": {
       "fullName": "deepaknegi16/Eureka",

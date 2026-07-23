@@ -13,7 +13,13 @@
     {
       "label": "GitHub",
       "url": "https://github.com/deepaknegi16",
-      "handle": "@deepaknegi16"
+      "handle": "@deepaknegi16",
+      "icon": "github"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/deepak-negi-151b8b76/",
+      "icon": "linkedin"
     }
   ],
   "seo": {

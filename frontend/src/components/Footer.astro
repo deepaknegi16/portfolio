@@ -1,6 +1,7 @@
 ---
 import { getProfile, githubFreshness } from '../lib/providers';
 import { formatRelative } from '../lib/format';
+import SocialIcon from './SocialIcon.astro';
 
 const profile = await getProfile();
 const year = new Date().getFullYear();
@@ -27,6 +28,7 @@ const year = new Date().getFullYear();
           profile.socials.map((social) => (
             <li>
               <a href={social.url} rel="me noopener" target="_blank">
+                <SocialIcon name={social.icon} />
                 {social.label}
               </a>
             </li>
@@ -35,7 +37,10 @@ const year = new Date().getFullYear();
         {
           profile.email && (
             <li>
-              <a href={`mailto:${profile.email}`}>Email</a>
+              <a href={`mailto:${profile.email}`}>
+                <SocialIcon name="email" />
+                Email
+              </a>
             </li>
           )
         }
@@ -73,6 +78,9 @@ const year = new Date().getFullYear();
   }
 
   .socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-wide);

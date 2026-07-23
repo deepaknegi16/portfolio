@@ -29,11 +29,16 @@ const partialDate = z
   .string()
   .regex(/^\d{4}(-\d{2}){0,2}$/, 'must be YYYY, YYYY-MM, or YYYY-MM-DD');
 
+/** Names of the inline SVG icons SocialIcon.astro can render. */
+export const SocialIconSchema = z.enum(['github', 'linkedin', 'email', 'link']);
+
 export const SocialLinkSchema = z.object({
   label: z.string().min(1),
   url: z.url(),
   /** Displayed instead of the raw URL when present, e.g. "@deepaknegi16" */
   handle: z.string().optional(),
+  /** Which inline icon to show. Falls back to a generic link glyph if omitted. */
+  icon: SocialIconSchema.default('link'),
 });
 
 /* ── Profile ──────────────────────────────────────────────────────────────── */
@@ -178,6 +183,7 @@ export const SkillsSchema = z.array(SkillGroupSchema);
 
 /* ── Types ────────────────────────────────────────────────────────────────── */
 
+export type SocialIconName = z.infer<typeof SocialIconSchema>;
 export type SocialLink = z.infer<typeof SocialLinkSchema>;
 export type Profile = z.infer<typeof ProfileSchema>;
 export type Project = z.infer<typeof ProjectSchema>;
