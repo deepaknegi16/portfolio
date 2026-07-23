@@ -31,9 +31,14 @@ services:
   ngrok:
     image: ngrok/ngrok:latest
     restart: unless-stopped
-    # Requires NGROK_AUTHTOKEN and NGROK_DOMAIN in .env. Without them this
-    # service fails to start — `web` still serves fine on localhost:8080.
-    command: http --domain=${NGROK_DOMAIN} web:80
+    # NGROK_AUTHTOKEN is required. NGROK_DOMAIN is optional: the ${VAR:+...}
+    # form expands to the --domain flag only when the variable is non-empty, so
+    # an unset domain yields a random *.ngrok-free.app URL instead of passing a
+    # broken `--domain=` and failing to start.
+    #
+    # Set NGROK_DOMAIN once you have claimed the free static domain — an
+    # ephemeral URL changes on every restart, which defeats sharing a portfolio.
+    command: http ${NGROK_DOMAIN:+--domain=${NGROK_DOMAIN}} web:80
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:?set NGROK_AUTHTOKEN in .env — see .env.example}
     ports:

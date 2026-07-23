@@ -27,3 +27,4 @@ re-deriving it from the source or re-litigating settled questions.
 | [0006](0006-provider-abstraction-over-content-collections.md) | Provider interface instead of Astro content collections | Accepted | 1 |
 | [0007](0007-dark-terminal-design-system.md) | Dark terminal aesthetic, token-driven, no CDN assets | Accepted | 1 |
 | [0008](0008-phase-boundaries.md) | Phase boundaries and what defines "done" for each | Accepted | all |
+| [0009](0009-ngrok-free-tier-realities.md) | ngrok free tier: cloud endpoint conflict + browser interstitial | Accepted | 2 |

@@ -5,8 +5,9 @@ never get renumbered — decisions and commits reference them.
 
 **Legend:** `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (reason inline)
 
-> **Current focus:** Phase 2 — verifying the container stack. Blocked on Docker
-> Desktop being installed and on ngrok credentials.
+> **Current focus:** Phase 2 — the container stack is verified locally at
+> http://localhost:8080. The public tunnel is blocked on P2-08 (delete the ngrok
+> Cloud Endpoint), which only you can do.
 
 ---
 
@@ -18,9 +19,9 @@ never get renumbered — decisions and commits reference them.
 - [x] **P0-04** Create `.gitignore` and `.env.example`
 - [x] **P0-05** Create root `README.md` with quickstart
 - [x] **P0-06** Install Node (`brew install node` → v26.5.0; Homebrew ships current, not 22 LTS)
-- [!] **P0-07** Install Docker Desktop — *needs your password, run it yourself:*
-      `brew install --cask docker`, then launch Docker Desktop once
-- [!] **P0-08** ngrok account: get authtoken + claim the free static domain — *blocked on user*
+- [x] **P0-07** Docker Desktop installed and launched — Docker 29.6.2, Compose v5.3.1
+- [x] **P0-08** ngrok authtoken set in `.env`; the free account came with the static domain
+      `polo-countdown-frolic.ngrok-free.dev` already assigned (see P2-08)
 
 ## Phase 1 — Astro static site
 
@@ -61,7 +62,14 @@ never get renumbered — decisions and commits reference them.
       gzip 20,212 → 4,595 bytes.
       **Outstanding:** ngrok tunnel + reaching the public URL from cellular — blocked on
       `NGROK_DOMAIN` being empty in `.env`.
-- [ ] **P2-07** Record ngrok interstitial behaviour in `decisions/` once observed
+- [x] **P2-07** ngrok behaviour observed and recorded in `decisions/0009` — interstitial is
+      real (ERR_NGROK_6024), and the free static domain is pre-occupied by an
+      auto-provisioned Cloud Endpoint
+- [!] **P2-08** Delete the auto-provisioned Cloud Endpoint at
+      https://dashboard.ngrok.com/endpoints so the agent tunnel can bind the domain —
+      *account action, only you can do it*
+- [ ] **P2-09** Set `NGROK_DOMAIN=polo-countdown-frolic.ngrok-free.dev` in `.env` and update
+      `seo.siteUrl` in `frontend/src/data/profile.json` to match
 
 ## Phase 3 — FastAPI backend
 
