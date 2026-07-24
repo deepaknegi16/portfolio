@@ -32,6 +32,16 @@ comments land within a minute or two. This PR (#7) that introduces the workflow
 is *not* self-reviewed — GitHub runs `pull_request` workflows from the base
 branch, so the workflow only becomes active after this PR merges to `main`.
 
+## Known limitation: fork PRs
+
+The workflow triggers on `pull_request`, which — by GitHub's design — does **not**
+expose repository secrets to pull requests opened from a **fork**. So a PR from an
+external contributor's fork gets no `ANTHROPIC_API_KEY` and the review step fails
+for that PR. This is the safe behavior (it's exactly why `pull_request` is used
+here instead of the secret-exposing `pull_request_target`), and it's a non-issue
+for a solo repo where PRs come from branches. If you ever need fork PRs reviewed,
+that's a separate, more careful setup — don't just switch to `pull_request_target`.
+
 ## Tuning
 
 - **Too chatty / too expensive:** lower `--max-turns` in the workflow.
