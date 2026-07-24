@@ -1,0 +1,80 @@
+name: Claude Code Review
+
+# Reviews every opened / updated pull request and posts findings as PR comments.
+#
+# Requires two one-time setup steps (see .github/CLAUDE_REVIEW_SETUP.md):
+#   1. Install the Claude GitHub App on this repository.
+#   2. Add an ANTHROPIC_API_KEY repository secret.
+# Without the secret the job fails fast and harmlessly — no PR is blocked.
+#
+# Note: for pull_request events GitHub runs the workflow file from the BASE
+# branch (main), so this only takes effect once it's merged to main. The PR that
+# introduces it is therefore not self-reviewed — that's expected for bootstrap.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Least privilege: read the code, write review comments, nothing else.
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+# A new push to a PR cancels an in-flight review of the older commit.
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    # Skip drafts and anything opened by a bot, to avoid noise and loops.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history so the action can diff the PR against its base.
+          fetch-depth: 0
+
+      - name: Claude review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Keep the review scoped and cheap; raise if reviews feel truncated.
+          claude_args: "--max-turns 12"
+          prompt: |
+            Review this pull request as ONE coherent change set and post your
+            findings as pull-request review comments (inline where a specific
+            line is at fault, otherwise a summary comment).
+
+            Follow the rubric in .claude/agents/code-reviewer.md exactly:
+
+            REPORT ONLY real defects —
+              - correctness: logic errors, wrong conditions, unhandled
+                null/undefined, bad async, races
+              - broken contracts: violations of the zod schema in
+                frontend/src/lib/schema.ts, or of the provider seam
+                (components must import only frontend/src/lib/providers/index,
+                never a provider implementation or a JSON file directly)
+              - security: injected input reaching a shell/HTML sink, secrets in
+                tracked files, loosened CSP/CORS, path traversal
+              - error/resource handling: swallowed errors, unhandled rejections
+              - accessibility regressions: removed focus styles, non-semantic
+                interactive elements, missing labels, contrast failing WCAG AA
+              - dead or duplicated logic
+
+            DO NOT report —
+              - formatting, naming, import order, style matching the surrounding code
+              - missing tests (unless the change breaks an existing test)
+              - speculative performance without a concrete hot path
+              - the intentional `TODO:` placeholder content in
+                frontend/src/data/*.json (see decisions/0002) — this is by design
+              - anything under dist/, node_modules/, .astro/, or lock files
+
+            Prefer a few confirmed findings over many speculative ones. Order
+            them most severe first. If you find nothing real, say so in a single
+            short comment and stop — do not pad it.
